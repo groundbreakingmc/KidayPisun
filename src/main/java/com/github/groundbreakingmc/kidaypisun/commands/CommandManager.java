@@ -3,6 +3,7 @@ package com.github.groundbreakingmc.kidaypisun.commands;
 import com.github.groundbreakingmc.kidaypisun.KidayPisun;
 import com.github.groundbreakingmc.kidaypisun.utils.DickUtils;
 import com.github.groundbreakingmc.kidaypisun.utils.config.ConfigValues;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -14,15 +15,17 @@ import java.util.List;
 
 public final class CommandManager implements TabExecutor {
 
+    private final KidayPisun plugin;
     private final ConfigValues configValues;
 
     public CommandManager(final KidayPisun plugin) {
+        this.plugin = plugin;
         this.configValues = plugin.getConfigValues();
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof final Player player)) {
             sender.sendMessage("Command for players only!");
             return true;
         }
@@ -36,7 +39,13 @@ public final class CommandManager implements TabExecutor {
             return true;
         }
 
-        DickUtils.spawn(player, dick);
+        if (label.equalsIgnoreCase("spampisun")) {
+            Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
+                DickUtils.spawn(player, dick);
+            }, 0L, 2L);
+        } else {
+            DickUtils.spawn(player, dick);
+        }
 
         return true;
     }

@@ -103,5 +103,10 @@
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.github.groundbreakingmc</groupId>
+            <artifactId>MyLib</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

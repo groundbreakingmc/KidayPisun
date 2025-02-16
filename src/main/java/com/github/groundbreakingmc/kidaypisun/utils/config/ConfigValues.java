@@ -1,6 +1,8 @@
 package com.github.groundbreakingmc.kidaypisun.utils.config;
 
 import com.github.groundbreakingmc.kidaypisun.KidayPisun;
+import com.github.groundbreakingmc.mylib.config.ConfigLoader;
+import com.github.groundbreakingmc.mylib.logger.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,7 +29,9 @@ public final class ConfigValues {
     }
 
     public void setupValues() {
-        final FileConfiguration config = new ConfigLoader(this.plugin).get("config.yml");
+        final FileConfiguration config = ConfigLoader.builder(this.plugin, LoggerFactory.createLogger(this.plugin))
+                .fileName("config.yml")
+                .build();
 
         this.resetTime = config.getInt("reset-in");
 

@@ -10,3 +10,4 @@ website: ${url}
 commands:
   pisun:
     permission: kidaypisun.use
+    aliases: [spampisun]
