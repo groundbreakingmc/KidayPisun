@@ -1,0 +1,16 @@
+
+# Unit: seconds
+reset-in: 10
+
+# Dick that will be thrown when the command is used without arguments,
+# as well as the values that will be used if not specified for custom dildos.
+default-dick:
+  head-material: pink_wool
+  body-material: white_wool
+  length: 3
+
+dicks:
+  # Length will be used from the "default-dick" while not specified
+  example:
+    head-material: brown_wool
+    body-material: black_wool

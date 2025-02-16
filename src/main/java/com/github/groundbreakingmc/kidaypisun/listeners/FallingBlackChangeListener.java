@@ -1,0 +1,92 @@
+package com.github.groundbreakingmc.kidaypisun.listeners;
+
+import com.github.groundbreakingmc.kidaypisun.KidayPisun;
+import com.github.groundbreakingmc.kidaypisun.utils.Data;
+import com.github.groundbreakingmc.kidaypisun.utils.DickUtils;
+import com.github.groundbreakingmc.kidaypisun.utils.config.ConfigValues;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+
+import java.util.UUID;
+
+public class FallingBlackChangeListener implements Listener {
+
+    private final KidayPisun plugin;
+    private final ConfigValues configValues;
+
+    public FallingBlackChangeListener(final KidayPisun plugin) {
+        this.plugin = plugin;
+        this.configValues = plugin.getConfigValues();
+    }
+
+    @EventHandler
+    public void onBlockChange(final EntityChangeBlockEvent event) {
+        final Entity entity = event.getEntity();
+        if (entity instanceof FallingBlock) {
+            final UUID entityUUID = entity.getUniqueId();
+            if (DickUtils.isPluginFallingBlock(entityUUID)) {
+                event.setCancelled(true);
+                entity.remove();
+                DickUtils.removeFromFallingBocks(entityUUID);
+            } else {
+                final Data<ConfigValues.Dick, Boolean> data = DickUtils.getFromPluginMainFallingBlocks(entityUUID);
+                if (data == null) {
+                    return;
+                }
+
+                final Location location = event.getBlock().getLocation().clone();
+                this.buildDick(location, data);
+
+                DickUtils.removeFromMainFallingBocks(entityUUID);
+            }
+        }
+    }
+
+    private void buildDick(final Location location,
+                           final Data<ConfigValues.Dick, Boolean> data) {
+        if (data.right()) {
+            location.setX(location.getX() + DickUtils.OFFSET);
+            this.build(location, data.left().bodyBlockData());
+
+            location.setX(location.getX() - (DickUtils.OFFSET * 2));
+            this.build(location, data.left().bodyBlockData());
+
+            location.setX(location.getX() + DickUtils.OFFSET);
+        } else {
+            location.setZ(location.getZ() + DickUtils.OFFSET);
+            this.build(location, data.left().bodyBlockData());
+
+            location.setZ(location.getZ() - (DickUtils.OFFSET * 2));
+            this.build(location, data.left().bodyBlockData());
+
+            location.setZ(location.getZ() + DickUtils.OFFSET);
+        }
+
+        for (int i = 0; i < data.left().length(); i++) {
+            this.build(location, data.left().bodyBlockData());
+            location.setY(location.getY() + DickUtils.OFFSET);
+        }
+
+        this.build(location, data.left().headBlockData());
+    }
+
+    private void build(final Location location, final BlockData blockData) {
+        final Block block = location.getBlock();
+        final Material originalMaterial = block.getType();
+
+        block.setType(blockData.getMaterial());
+
+        Bukkit.getScheduler().runTaskLater(this.plugin, () ->
+                        block.setType(originalMaterial),
+                this.configValues.getResetTime()
+        );
+    }
+}
