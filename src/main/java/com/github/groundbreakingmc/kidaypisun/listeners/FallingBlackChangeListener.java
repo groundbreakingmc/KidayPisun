@@ -42,6 +42,9 @@ public class FallingBlackChangeListener implements Listener {
                     return;
                 }
 
+                event.setCancelled(true);
+                entity.remove();
+
                 final Location location = event.getBlock().getLocation().clone();
                 this.buildDick(location, data);
 
