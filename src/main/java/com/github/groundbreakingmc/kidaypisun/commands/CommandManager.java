@@ -65,9 +65,9 @@ public final class CommandManager implements TabExecutor {
     @Override
     public @NotNull List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player && sender.hasPermission("kidaypisun.use")) {
-            final Set<String> dicks = this.configValues.getDicks().keySet();
+            final List<String> dicks = new ArrayList<>(this.configValues.getDicks().keySet());
             dicks.add("default");
-            return List.copyOf(dicks);
+            return dicks;
         }
 
         return List.of();
