@@ -1,6 +1,7 @@
 package com.github.groundbreakingmc.kidaypisun.utils;
 
 import com.github.groundbreakingmc.kidaypisun.utils.config.ConfigValues;
+import com.github.groundbreakingmc.mylib.collections.cases.Pair;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,7 +17,7 @@ import java.util.*;
 public final class DickUtils {
 
     private static final Set<UUID> FALLING_BLOCKS;
-    private static final Map<UUID, Data<ConfigValues.Dick, Boolean>> MAIN_FALLING_BLOCKS;
+    private static final Map<UUID, Pair<ConfigValues.Dick, Boolean>> MAIN_FALLING_BLOCKS;
     public static final double OFFSET;
 
     public static void spawn(final Player player, final ConfigValues.Dick dick) {
@@ -51,7 +52,7 @@ public final class DickUtils {
 
             location.setY(location.getY() + OFFSET);
             if (isMain) {
-                MAIN_FALLING_BLOCKS.put(fallingBlock.getUniqueId(), new Data<>(dick, horizontal));
+                MAIN_FALLING_BLOCKS.put(fallingBlock.getUniqueId(), new Pair<>(dick, horizontal));
             }
         }
 
@@ -83,7 +84,7 @@ public final class DickUtils {
     }
 
     @Nullable
-    public static Data<ConfigValues.Dick, Boolean> getFromPluginMainFallingBlocks(final UUID entityUUID) {
+    public static Pair<ConfigValues.Dick, Boolean> getFromPluginMainFallingBlocks(final UUID entityUUID) {
         if (MAIN_FALLING_BLOCKS.isEmpty()) {
             return null;
         }

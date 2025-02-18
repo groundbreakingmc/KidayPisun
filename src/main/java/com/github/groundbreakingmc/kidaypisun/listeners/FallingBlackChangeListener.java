@@ -1,9 +1,9 @@
 package com.github.groundbreakingmc.kidaypisun.listeners;
 
 import com.github.groundbreakingmc.kidaypisun.KidayPisun;
-import com.github.groundbreakingmc.kidaypisun.utils.Data;
 import com.github.groundbreakingmc.kidaypisun.utils.DickUtils;
 import com.github.groundbreakingmc.kidaypisun.utils.config.ConfigValues;
+import com.github.groundbreakingmc.mylib.collections.cases.Pair;
 import com.jeff_media.customblockdata.CustomBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,7 +39,7 @@ public class FallingBlackChangeListener implements Listener {
                 entity.remove();
                 DickUtils.removeFromFallingBocks(entityUUID);
             } else {
-                final Data<ConfigValues.Dick, Boolean> data = DickUtils.getFromPluginMainFallingBlocks(entityUUID);
+                final Pair<ConfigValues.Dick, Boolean> data = DickUtils.getFromPluginMainFallingBlocks(entityUUID);
                 if (data == null) {
                     return;
                 }
@@ -56,31 +56,31 @@ public class FallingBlackChangeListener implements Listener {
     }
 
     private void buildDick(final Location location,
-                           final Data<ConfigValues.Dick, Boolean> data) {
-        if (data.right()) {
+                           final Pair<ConfigValues.Dick, Boolean> data) {
+        if (data.getRight()) {
             location.setX(location.getX() + DickUtils.OFFSET);
-            this.build(location, data.left().bodyBlockData());
+            this.build(location, data.getLeft().bodyBlockData());
 
             location.setX(location.getX() - (DickUtils.OFFSET * 2));
-            this.build(location, data.left().bodyBlockData());
+            this.build(location, data.getLeft().bodyBlockData());
 
             location.setX(location.getX() + DickUtils.OFFSET);
         } else {
             location.setZ(location.getZ() + DickUtils.OFFSET);
-            this.build(location, data.left().bodyBlockData());
+            this.build(location, data.getLeft().bodyBlockData());
 
             location.setZ(location.getZ() - (DickUtils.OFFSET * 2));
-            this.build(location, data.left().bodyBlockData());
+            this.build(location, data.getLeft().bodyBlockData());
 
             location.setZ(location.getZ() + DickUtils.OFFSET);
         }
 
-        for (int i = 0; i < data.left().length(); i++) {
-            this.build(location, data.left().bodyBlockData());
+        for (int i = 0; i < data.getLeft().length(); i++) {
+            this.build(location, data.getLeft().bodyBlockData());
             location.setY(location.getY() + DickUtils.OFFSET);
         }
 
-        this.build(location, data.left().headBlockData());
+        this.build(location, data.getLeft().headBlockData());
     }
 
     private void build(final Location location, final BlockData blockData) {
