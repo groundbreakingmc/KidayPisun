@@ -38,6 +38,7 @@
                             <pattern>org.bstats</pattern>
                             <shadedPattern>com.github.groundbreakingmc.kidaypisun.bstats.metrics</shadedPattern>
                         </relocation>
+                        <!-- Remove it if you are using or want to use MyLib as plugin -->
                         <relocation>
                             <pattern>com.github.groundbreakingmc.mylib</pattern>
                             <shadedPattern>com.github.groundbreakingmc.kidaypisun.mylib</shadedPattern>
@@ -111,16 +112,19 @@
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
+        <!-- https://github.com/mfnalex/CustomBlockData -->
         <dependency>
             <groupId>com.jeff-media</groupId>
             <artifactId>custom-block-data</artifactId>
             <version>2.2.3</version>
             <scope>compile</scope>
         </dependency>
+        <!-- https://github.com/groundbreakingmc/MyLib -->
         <dependency>
             <groupId>com.github.groundbreakingmc</groupId>
             <artifactId>MyLib</artifactId>
             <version>1.0</version>
+            <!-- Use provided if you are using or want to use MyLib as plugin -->
             <scope>compile</scope>
         </dependency>
     </dependencies>
