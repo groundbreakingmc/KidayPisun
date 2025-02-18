@@ -8,10 +8,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.*;
 
 public final class CommandManager implements TabExecutor {
 
@@ -30,7 +30,7 @@ public final class CommandManager implements TabExecutor {
             return true;
         }
 
-        final ConfigValues.Dick dick = args.length > 0
+        final ConfigValues.Dick dick = args.length > 0 && !args[0].equalsIgnoreCase("default")
                 ? this.configValues.getDicks().get(args[0])
                 : this.configValues.getDefaultDick();
 
@@ -40,9 +40,21 @@ public final class CommandManager implements TabExecutor {
         }
 
         if (label.equalsIgnoreCase("spampisun")) {
-            Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
-                DickUtils.spawn(player, dick);
-            }, 0L, 2L);
+            BukkitTask task = this.plugin.removeTask(player);
+            if (task != null) {
+                task.cancel();
+                return true;
+            }
+
+            try {
+                final int period = args.length > 1 ? Integer.parseInt(args[1]) : 2;
+                task = Bukkit.getScheduler().runTaskTimer(this.plugin, () ->
+                        DickUtils.spawn(player, dick), 0L, period
+                );
+                this.plugin.addTask(player, task);
+            } catch (final NumberFormatException ex) {
+                sender.sendMessage("§cIncorrect numb: " + args[1]);
+            }
         } else {
             DickUtils.spawn(player, dick);
         }
@@ -51,9 +63,11 @@ public final class CommandManager implements TabExecutor {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public @NotNull List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player && sender.hasPermission("kidaypisun.use")) {
-            return List.copyOf(this.configValues.getDicks().keySet());
+            final Set<String> dicks = this.configValues.getDicks().keySet();
+            dicks.add("default");
+            return List.copyOf(dicks);
         }
 
         return List.of();

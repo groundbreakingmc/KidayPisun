@@ -8,25 +8,41 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Getter
 public final class KidayPisun extends JavaPlugin {
 
-    public static final NamespacedKey NAMESPACED_KEY = new NamespacedKey("kidaypisun", "kidaypisun");
-    public static final PersistentDataType<BlockData, BlockData> PERSISTENT_DATA_TYPE = createPersistentDataType();
+    public static final NamespacedKey KEY;
+    public static final PersistentDataType<BlockData, BlockData> PERSISTENT_DATA_TYPE;
 
-    private final ConfigValues configValues = new ConfigValues(this);
+    private final ConfigValues configValues;
+    private final Map<UUID, BukkitTask> spamming;
+
+    public KidayPisun() {
+        this.configValues = new ConfigValues(this);
+        this.spamming = new HashMap<>();
+    }
 
     @Override
     public void onEnable() {
         this.configValues.setupValues();
         this.setupCommand();
         this.registerEvent();
+    }
+
+    @Override
+    public void onDisable() {
+        super.getServer().getScheduler().cancelTasks(this);
     }
 
     private void setupCommand() {
@@ -42,6 +58,27 @@ public final class KidayPisun extends JavaPlugin {
                 .registerEvents(listener, this);
     }
 
+    public void addTask(final Player player, final BukkitTask task) {
+        this.spamming.put(player.getUniqueId(), task);
+    }
+
+    public BukkitTask removeTask(final Player player) {
+        return this.spamming.remove(player.getUniqueId());
+    }
+
+    public void cancel(final Player player) {
+        final BukkitTask task = this.spamming.remove(player.getUniqueId());
+        if (task != null) {
+            task.cancel();
+        }
+    }
+
+    static {
+        KEY = new NamespacedKey("kidaypisun", "kidaypisun");
+        PERSISTENT_DATA_TYPE = createPersistentDataType();
+    }
+
+    @SuppressWarnings("Unchecked")
     private static PersistentDataType<BlockData, BlockData> createPersistentDataType() {
         try {
             final Constructor<?> constructor = PersistentDataType.PrimitivePersistentDataType.class
@@ -51,8 +88,7 @@ public final class KidayPisun extends JavaPlugin {
 
             return (PersistentDataType<BlockData, BlockData>) constructor.newInstance(BlockData.class);
         } catch (final Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 }

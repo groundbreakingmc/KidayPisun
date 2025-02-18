@@ -4,6 +4,7 @@ import com.github.groundbreakingmc.kidaypisun.KidayPisun;
 import com.github.groundbreakingmc.kidaypisun.utils.Data;
 import com.github.groundbreakingmc.kidaypisun.utils.DickUtils;
 import com.github.groundbreakingmc.kidaypisun.utils.config.ConfigValues;
+import com.jeff_media.customblockdata.CustomBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
@@ -83,13 +85,21 @@ public class FallingBlackChangeListener implements Listener {
 
     private void build(final Location location, final BlockData blockData) {
         final Block block = location.getBlock();
+
+        final CustomBlockData customBlockData = new CustomBlockData(block, this.plugin);
+        final Integer numb = customBlockData.get(KidayPisun.KEY, PersistentDataType.INTEGER);
+        if (numb != null) {
+            return;
+        }
+
         final Material originalMaterial = block.getType();
 
         block.setType(blockData.getMaterial());
+        customBlockData.set(KidayPisun.KEY, PersistentDataType.INTEGER, 1);
 
-        Bukkit.getScheduler().runTaskLater(this.plugin, () ->
-                        block.setType(originalMaterial),
-                this.configValues.getResetTime()
-        );
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            block.setType(originalMaterial);
+            customBlockData.remove(KidayPisun.KEY);
+        }, this.configValues.getResetTime());
     }
 }

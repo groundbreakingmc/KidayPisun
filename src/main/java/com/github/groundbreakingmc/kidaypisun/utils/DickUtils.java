@@ -15,10 +15,9 @@ import java.util.*;
 @UtilityClass
 public final class DickUtils {
 
-    public static final double OFFSET = 1.0D;
-
-    private static final Set<UUID> FALLING_BLOCKS = new HashSet<>();
-    private static final Map<UUID, Data<ConfigValues.Dick, Boolean>> MAIN_FALLING_BLOCKS = new HashMap<>();
+    private static final Set<UUID> FALLING_BLOCKS;
+    private static final Map<UUID, Data<ConfigValues.Dick, Boolean>> MAIN_FALLING_BLOCKS;
+    public static final double OFFSET;
 
     public static void spawn(final Player player, final ConfigValues.Dick dick) {
         final Location location = player.getLocation().clone();
@@ -47,7 +46,8 @@ public final class DickUtils {
                     vector,
                     location,
                     dick.bodyBlockData(),
-                    isMain);
+                    isMain
+            );
 
             location.setY(location.getY() + OFFSET);
             if (isMain) {
@@ -93,5 +93,11 @@ public final class DickUtils {
 
     public static void removeFromMainFallingBocks(final UUID entityUUID) {
         MAIN_FALLING_BLOCKS.remove(entityUUID);
+    }
+
+    static {
+        FALLING_BLOCKS = new HashSet<>();
+        MAIN_FALLING_BLOCKS = new HashMap<>();
+        OFFSET = 1.0D;
     }
 }
