@@ -1,6 +1,7 @@
 package com.github.groundbreakingmc.kidaypisun;
 
 import com.github.groundbreakingmc.kidaypisun.commands.CommandManager;
+import com.github.groundbreakingmc.kidaypisun.listeners.DisconectListener;
 import com.github.groundbreakingmc.kidaypisun.listeners.FallingBlackChangeListener;
 import com.github.groundbreakingmc.kidaypisun.utils.config.ConfigValues;
 import lombok.Getter;
@@ -37,7 +38,8 @@ public final class KidayPisun extends JavaPlugin {
     public void onEnable() {
         this.configValues.setupValues();
         this.setupCommand();
-        this.registerEvent();
+        this.registerEvent(new FallingBlackChangeListener(this));
+        this.registerEvent(new DisconectListener(this));
     }
 
     @Override
@@ -52,10 +54,8 @@ public final class KidayPisun extends JavaPlugin {
         pisunCommand.setTabCompleter(executor);
     }
 
-    private void registerEvent() {
-        final Listener listener = new FallingBlackChangeListener(this);
-        super.getServer().getPluginManager()
-                .registerEvents(listener, this);
+    private void registerEvent(final Listener listener) {
+        super.getServer().getPluginManager().registerEvents(listener, this);
     }
 
     public void addTask(final Player player, final BukkitTask task) {
