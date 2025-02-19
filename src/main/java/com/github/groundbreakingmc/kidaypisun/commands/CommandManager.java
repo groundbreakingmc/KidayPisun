@@ -66,9 +66,13 @@ public final class CommandManager implements TabExecutor {
     @Override
     public @NotNull List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player && sender.hasPermission("kidaypisun.use")) {
-            final List<String> dicks = new ArrayList<>(this.configValues.getDicks().keySet());
-            dicks.add("default");
-            return dicks;
+            if (args.length == 1) {
+                final List<String> dicks = new ArrayList<>(this.configValues.getDicks().keySet());
+                dicks.add("default");
+                return dicks;
+            } else if (args.length == 2) {
+                return List.of("<period>");
+            }
         }
 
         return List.of();
