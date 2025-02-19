@@ -15,6 +15,7 @@
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <shade.plugin.version>3.6.0</shade.plugin.version>
+        <resources.dir>src/main/resources</resources.dir>
     </properties>
 
     <build>
@@ -36,7 +37,6 @@
             <id>kidaypisun</id>
             <properties>
                 <final.name>KidayPisun</final.name>
-                <resources.dir>src/main/resources</resources.dir>
             </properties>
             <build>
                 <finalName>${final.name}</finalName>
@@ -47,7 +47,7 @@
                         <filtering>true</filtering>
                     </resource>
                     <resource>
-                        <directory>${resources.dir}/plugin</directory>
+                        <directory>${resources.dir}/pluginyml</directory>
                         <filtering>true</filtering>
                     </resource>
                 </resources>
@@ -107,7 +107,6 @@
             <id>kidaypisun-mylib</id>
             <properties>
                 <final.name>KidayPisun-MyLib</final.name>
-                <resources.dir>src/main/resources</resources.dir>
             </properties>
             <build>
                 <finalName>${final.name}</finalName>
@@ -118,7 +117,7 @@
                         <filtering>true</filtering>
                     </resource>
                     <resource>
-                        <directory>${resources.dir}/plugin</directory>
+                        <directory>${resources.dir}/pluginyml</directory>
                         <filtering>true</filtering>
                     </resource>
                 </resources>
@@ -182,7 +181,6 @@
             <id>towerbuilder</id>
             <properties>
                 <final.name>TowerBuilder</final.name>
-                <resources.dir>src/main/spigotresources</resources.dir>
             </properties>
             <build>
                 <finalName>${final.name}</finalName>
@@ -193,7 +191,7 @@
                         <filtering>true</filtering>
                     </resource>
                     <resource>
-                        <directory>${resources.dir}/sruplugin</directory>
+                        <directory>${resources.dir}/srupluginyml</directory>
                         <filtering>true</filtering>
                     </resource>
                 </resources>
@@ -253,7 +251,6 @@
             <id>towerbuilder-mylib</id>
             <properties>
                 <final.name>TowerBuilder-MyLib</final.name>
-                <resources.dir>src/main/spigotresources</resources.dir>
             </properties>
             <build>
                 <finalName>${final.name}</finalName>
@@ -264,7 +261,7 @@
                         <filtering>true</filtering>
                     </resource>
                     <resource>
-                        <directory>${resources.dir}/sruplugin</directory>
+                        <directory>${resources.dir}/srupluginyml</directory>
                         <filtering>true</filtering>
                     </resource>
                 </resources>
