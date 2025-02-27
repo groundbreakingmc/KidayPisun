@@ -92,13 +92,13 @@ public class FallingBlackChangeListener implements Listener {
             return;
         }
 
-        final Material originalMaterial = block.getType();
+        final BlockData originalBlockData = block.getBlockData();
 
         block.setType(blockData.getMaterial());
         customBlockData.set(KidayPisun.KEY, PersistentDataType.INTEGER, 1);
 
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            block.setType(originalMaterial);
+            block.setBlockData(originalBlockData);
             customBlockData.remove(KidayPisun.KEY);
         }, this.configValues.getResetTime());
     }
