@@ -5,6 +5,7 @@ import com.github.groundbreakingmc.kidaypisun.listeners.DisconectListener;
 import com.github.groundbreakingmc.kidaypisun.listeners.FallingBlackChangeListener;
 import com.github.groundbreakingmc.kidaypisun.utils.config.ConfigValues;
 import lombok.Getter;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.PluginCommand;
@@ -36,6 +37,7 @@ public final class KidayPisun extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        new Metrics(this, 27286);
         this.configValues.setupValues();
         this.setupCommand();
         this.registerEvent(new FallingBlackChangeListener(this));
